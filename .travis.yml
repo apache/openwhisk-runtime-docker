@@ -1,0 +1,32 @@
+sudo: required
+group: deprecated-2017Q3
+language: scala
+scala:
+- 2.11.8
+services:
+- docker
+before_install:
+- "./tools/travis/setup.sh"
+install: true
+script:
+- "./tools/travis/build.sh && ./tools/travis/build_sdk.sh && ./tools/travis/deploy.sh && ./tools/travis/test.sh"
+before_deploy:
+- "./tools/travis/rename_sdk.sh ${TRAVIS_TAG%@*} ${TRAVIS_TAG##*@}"
+deploy:
+- provider: script
+  script: "./tools/travis/publish.sh csantanapr ${TRAVIS_TAG%@*} ${TRAVIS_TAG##*@}"
+  on:
+    tags: true
+    all_branches: true
+    condition: "${TRAVIS_TAG%@*} = dockerskeleton"
+- provider: releases
+  api_key:
+    secure: "q8erbGUKDQcrEe4H1DT0UDHnbTb7eNP4RkM3K6VIT+lfLRHJBKlVLW5MepQugyLVdJGAuvKR60pEAjTzTeRf6yy/fARvq+CQk4Kqy5rBJdvbCkCIAL+kvdFx1HJ/4YZ0rNFQf41uNpONf4bAv7fX7E2KprXgLSZ0HSEuMLD5v4FGQ8OaxOMmFVSEFOYuzUD/UdX/xTx6XMmmwIXu3NxNQeOxbOlcZMalF4NQS+tOIFVDPfprRFIyVkORfdS+yfhEZ8PjtyZ9h+oDvRiqxIP/8LVcNuuxSnShPN/hx55rE79XJc6OC74LSOa2aKRvKlcYnSZBMj+FtIj4/VCjkcSb5tEvr96243lXzg0nKCaEY9dQZ1mk0Qbw7mSo5abXqOSNqVR5y6zEw1Tc/n+h1YGoanacw4a9goueOn8cGygHvncIi4G9ctnyQ3Q6q46eMR6E1x6OCxwDmcokze//NFSflU25E2Dcq2VWE2NStofUyjETIo0JBzxbuQpMmbMQDafLh2bYLirKDE0L6O3H5cr6bCZsPfatsDjR3YGi4uIE79IdWT9hEHTDlIE4Bs48Y/+fZqOJwGiIJwk3H5KI9exXsjFS0K/njW3RP/EeYAB6sBF3+H9HhR1nZo8BZvh6cGPy8iBjwuodlvmCuklXsZKnW25V0a8bEAMFSwxWF5rhKvU="
+  overwrite: true
+  skip_cleanup: true
+  file: "./build/blackbox-${TRAVIS_TAG##*@}.tar.gz"
+  on:
+    tags: true
+    all_branches: true
+    condition: "${TRAVIS_TAG%@*} = sdk"
+

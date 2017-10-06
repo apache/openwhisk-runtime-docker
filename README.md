@@ -1,4 +1,4 @@
-# Apache OpenWhisk runtimes for nodejs
+# Apache OpenWhisk runtimes for docker
 [![Build Status](https://travis-ci.org/apache/incubator-openwhisk-runtime-docker.svg?branch=master)](https://travis-ci.org/apache/incubator-openwhisk-runtime-docker)
 
 

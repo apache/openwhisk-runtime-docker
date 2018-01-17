@@ -263,7 +263,7 @@ def complete(response):
 
 def main():
     port = int(os.getenv('FLASK_PROXY_PORT', 8080))
-    server = WSGIServer(('', port), proxy, log=None)
+    server = WSGIServer(('0.0.0.0', port), proxy, log=None)
     server.serve_forever()
 
 if __name__ == '__main__':

@@ -343,4 +343,23 @@ trait BasicActionRunnerTests extends ActionProxyContainerTestUtils {
       }
     }
   }
+
+  it should "receive a large (1MB) argument" in {
+    withActionContainer() { c =>
+      val code = """
+                   |#!/bin/bash
+                   |  read inputstring
+                   |  echo $inputstring
+                   |
+                 """.stripMargin.trim
+
+      val (initCode, initRes) = c.init(initPayload(code))
+      initCode should be(200)
+
+      val arg = JsObject("arg" -> JsString(("a" * 1048561)))
+      val (_, runRes) = c.run(runPayload(arg))
+      runRes.get shouldBe arg
+    }
+  }
+
 }

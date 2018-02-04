@@ -47,10 +47,11 @@ class ActionRunner:
     # @param source the path where the source code will be located (if any)
     # @param binary the path where the binary will be located (may be the
     # same as source code path)
-    def __init__(self, source=None, binary=None):
+    def __init__(self, source=None, binary=None, zipdest=None):
         defaultBinary = '/action/exec'
         self.source = source if source else defaultBinary
         self.binary = binary if binary else defaultBinary
+        self.zipdest = zipdest if zipdest else os.path.dirname(self.source)
 
     def preinit(self):
         return
@@ -127,17 +128,28 @@ class ActionRunner:
 
         try:
             input = json.dumps(args)
-            p = subprocess.Popen(
-                [self.binary, input],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                env=env)
+            if len(input) > 131071:             # MAX_ARG_STRLEN (131071) linux/binfmts.h
+                # pass argument via stdin
+                p = subprocess.Popen(
+                    [self.binary],
+                    stdin=subprocess.PIPE,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    env=env)
+            else:
+                # pass argument via stdin and command parameter
+                p = subprocess.Popen(
+                    [self.binary, input],
+                    stdin=subprocess.PIPE,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    env=env)
+            # run the process and wait until it completes.
+            # stdout/stderr will always be set because we passed PIPEs to Popen
+            (o, e) = p.communicate(input=input.encode())
+
         except Exception as e:
             return error(e)
-
-        # run the process and wait until it completes.
-        # stdout/stderr will always be set because we passed PIPEs to Popen
-        (o, e) = p.communicate()
 
         # stdout/stderr may be either text or bytes, depending on Python
         # version, so if bytes, decode to text. Note that in Python 2
@@ -182,7 +194,7 @@ class ActionRunner:
             bytes = base64.b64decode(message['code'])
             bytes = io.BytesIO(bytes)
             archive = zipfile.ZipFile(bytes)
-            archive.extractall(os.path.dirname(self.source))
+            archive.extractall(self.zipdest)
             archive.close()
             return True
         except Exception as e:

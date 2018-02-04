@@ -11,7 +11,7 @@ RUN apk update \
         jq \
         perl \
         zip \
-        git
+        git \
   && pip install --upgrade pip setuptools six \
   && pip install --no-cache-dir gevent==1.2.1 flask==0.12 \
   && apk del .build-deps

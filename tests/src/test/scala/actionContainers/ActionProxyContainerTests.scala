@@ -71,8 +71,7 @@ class ActionProxyContainerTests extends BasicActionRunnerTests with WskActorSyst
                 |print $ARGV[0];
             """.stripMargin.trim
 
-    // excluding perl as it not installed in alpine based image
-    Seq(("bash", bash), ("python", python))
+    Seq(("bash", bash), ("python", python), ("perl", perl))
   }
 
   val stdUnicodeSamples = {
@@ -123,8 +122,7 @@ class ActionProxyContainerTests extends BasicActionRunnerTests with WskActorSyst
                 |print "{ \"api_host\": \"$a\", \"api_key\": \"$b\", \"namespace\": \"$c\", \"action_name\": \"$d\", \"activation_id\": \"$e\", \"deadline\": \"$f\" }";
             """.stripMargin.trim
 
-    // excluding perl as it not installed in alpine based image
-    Seq(("bash", bash), ("python", python))
+    Seq(("bash", bash), ("python", python), ("perl", perl))
   }
 
   behavior of "openwhisk/dockerskeleton"

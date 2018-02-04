@@ -16,4 +16,4 @@ read inputstring
 echo 'stdin input length: '${#inputstring}
 
 # last line of output = ation result
-echo '{ "Status": "Ok" }'
+echo '{ "error": "This is a stub action. Replace it with custom logic." }'

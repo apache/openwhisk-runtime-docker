@@ -26,8 +26,7 @@ TERM=dumb ./gradlew \
 :common:scala:install \
 :core:controller:install \
 :core:invoker:install \
-:tests:install \
--x test -x createKeystore
+:tests:install
 
 # Build runtime
 cd $ROOTDIR

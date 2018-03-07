@@ -19,6 +19,10 @@
 # Apache OpenWhisk Docker Runtime Container
 
 
+## 1.2.0
+Changes:
+  - Added utilties curl and wget
+
 ## 1.1.0
 Changes:
   - Allow input parameter larger than 128KB

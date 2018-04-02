@@ -1,4 +1,5 @@
-ext.dockerImageName = 'badaction'
+subprojects {
+    dockerBuildImage.dependsOn ':core:actionProxy:dockerBuildImage'
+    dockerBuildImage.inputDir = projectDir
+}
 
-apply from: '../../../../gradle/docker.gradle'
-distDocker.dependsOn ':core:actionProxy:distDocker'

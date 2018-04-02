@@ -18,8 +18,8 @@ tasks.withType(Test) {
 
 // Add all images needed for local testing here
 test.dependsOn([
-    ':tests:dat:blackbox:badaction:distDocker',
-    ':tests:dat:blackbox:badproxy:distDocker'
+    ':tests:dat:blackbox:badaction:dockerBuildImage',
+    ':tests:dat:blackbox:badproxy:dockerBuildImage'
 ])
 
 dependencies {

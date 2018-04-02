@@ -1,9 +1,8 @@
 # Dockerfile for docker skeleton (useful for running blackbox binaries, scripts, or Python 3 actions) .
-FROM python:3.6.1-alpine
+FROM python:3.6.4-alpine3.7
 
 # Upgrade and install basic Python dependencies.
-RUN apk upgrade --update \
-  && apk add --no-cache bash perl jq zip git curl wget openssl ca-certificates sed \
+RUN apk add --update --no-cache bash perl jq zip git curl wget openssl ca-certificates sed \
   && update-ca-certificates \
   && apk add --no-cache --virtual .build-deps bzip2-dev gcc libc-dev \
   && pip install --upgrade pip setuptools six \
@@ -13,10 +12,13 @@ RUN apk upgrade --update \
 ENV FLASK_PROXY_PORT 8080
 
 RUN mkdir -p /actionProxy
-ADD actionproxy.py /actionProxy/
+COPY actionproxy.py /actionProxy/
 
 RUN mkdir -p /action
-ADD stub.sh /action/exec
+COPY stub.sh /action/exec
 RUN chmod +x /action/exec
 
+EXPOSE 8080
 CMD ["/bin/bash", "-c", "cd actionProxy && python -u actionproxy.py"]
+
+# VIM: let b:syntastic_dockerfile_hadolint_args = "--ignore DL3018"

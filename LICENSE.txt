@@ -187,7 +187,7 @@
       same "printed page" as the copyright notice for easier
       identification within third-party archives.
 
-   Copyright 2015-2016  IBM Corporation
+   Copyright 2016-present The Apache Software Foundation
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -200,3 +200,46 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+
+
+========================================================================
+Python Software Foundation License
+========================================================================
+
+This distribution has a binary dependency on the following components, which are available under a Python Software Foundation License.
+Python 3.6.1 (python - https://www.python.org/)
+  License included at licenses/LICENSE-python.txt, or https://docs.python.org/3/license.html
+
+
+========================================================================
+MIT License
+========================================================================
+
+This distribution has a binary dependency on the following components, which are available under an MIT License (https://opensource.org/licenses/MIT).
+Gevent 1.2.1 (gevent - https://github.com/gevent/gevent/)
+  License included at licenses/LICENSE-gevent.txt, or https://github.com/gevent/gevent/blob/master/LICENSE
+  Copyright (c) Denis Bilenko and the contributors, http://www.gevent.org
+
+
+This distribution depends on the following components, which are available under an MIT License (https://opensource.org/licenses/MIT).
+Setuptools latest (setuptools - https://github.com/pypa/setuptools/)
+  License included at licenses/LICENSE-setuptools.txt, or https://github.com/pypa/setuptools/blob/master/LICENSE
+  Copyright (c) 2016 Jason R Coombs <jaraco@jaraco.com>
+
+Six latest (six - https://github.com/benjaminp/six/)
+  License included at licenses/LICENSE-six.txt, or https://github.com/benjaminp/six/blob/master/LICENSE
+  Copyright (c) 2010-2018 Benjamin Peterson
+
+Pip latest (pip - https://github.com/pypa/pip/)
+  License included at licenses/LICENSE-pip.txt, or https://github.com/pypa/pip/blob/master/LICENSE.txt
+  Copyright (c) 2008-2018 The pip developers
+
+
+========================================================================
+BSD 3-clause License
+========================================================================
+
+This distribution has a binary dependency on the following components, which are available under a BSD 3-clause License (https://opensource.org/licenses/BSD-3-Clause).
+Flask 0.12 (flask - https://github.com/pallets/flask/)
+  License included at licenses/LICENSE-flask.txt, or https://github.com/pallets/flask/blob/master/LICENSE
+  Copyright (c) 2010 by the Pallets team.

@@ -23,10 +23,15 @@ set -ex
 SCRIPTDIR=$(cd $(dirname "$0") && pwd)
 ROOTDIR="$SCRIPTDIR/../.."
 WHISKDIR="$ROOTDIR/../openwhisk"
+UTILDIR="$ROOTDIR/../incubator-openwhisk-utilities"
 
 export OPENWHISK_HOME=$WHISKDIR
 
 IMAGE_PREFIX="testing"
+
+# run scancode using the ASF Release configuration
+cd $UTILDIR
+scancode/scanCode.py --config scancode/ASF-Release.cfg $ROOTDIR
 
 # Build OpenWhisk
 cd $WHISKDIR
@@ -51,7 +56,3 @@ TERM=dumb ./gradlew \
 :core:actionProxy:distDocker \
 :sdk:docker:distDocker \
 -PdockerImagePrefix=${IMAGE_PREFIX}
-
-
-
-

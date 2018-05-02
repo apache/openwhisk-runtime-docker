@@ -29,8 +29,6 @@ BUILD_VERSION=$2
 
 if [ ${BUILD_TYPE} == "sdk" ]; then
   find ${ROOTDIR}
-  ls ${BUILDOUTPUTDIR}/ 
+  ls ${BUILDOUTPUTDIR}/
   mv ${BUILDOUTPUTDIR}/blackbox.tar.gz ${BUILDOUTPUTDIR}/blackbox-${BUILD_VERSION}.tar.gz
 fi
-
-

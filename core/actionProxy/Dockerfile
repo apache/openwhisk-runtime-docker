@@ -19,7 +19,7 @@ FROM python:3.6.1-alpine
 
 # Upgrade and install basic Python dependencies.
 RUN apk upgrade --update \
-  && apk add --no-cache bash perl jq zip git curl wget openssl ca-certificates sed \
+  && apk add --no-cache bash perl jq zip git curl wget openssl ca-certificates sed openssh-client \
   && update-ca-certificates \
   && apk add --no-cache --virtual .build-deps bzip2-dev gcc libc-dev \
   && pip install --upgrade pip setuptools six \

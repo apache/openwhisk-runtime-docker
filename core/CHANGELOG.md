@@ -19,6 +19,10 @@
 # Apache OpenWhisk Docker Runtime Container
 
 
+## 1.3.0
+Changes:
+  - Added openssh-client
+
 ## 1.2.0
 Changes:
   - Added utilties curl and wget

@@ -18,16 +18,12 @@
 package runtime.actionContainers
 
 import java.util.concurrent.TimeoutException
-
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
-
-import ActionContainer.withContainer
 import common.WskActorSystem
-import spray.json.JsNumber
-import spray.json.JsObject
-import spray.json.JsString
-import spray.json.JsBoolean
+import actionContainers.{ActionContainer, ActionProxyContainerTestUtils}
+import actionContainers.ActionContainer.withContainer
+import spray.json._
 
 @RunWith(classOf[JUnitRunner])
 class DockerExampleContainerTests extends ActionProxyContainerTestUtils with WskActorSystem {

@@ -39,6 +39,9 @@ import org.scalatest.Matchers
 import akka.actor.ActorSystem
 import common.WhiskProperties
 import spray.json._
+import common.StreamLogging
+import whisk.common.Logging
+import whisk.common.TransactionId
 import whisk.core.entity.Exec
 
 /**
@@ -50,7 +53,7 @@ trait ActionContainer {
   def run(value: JsValue): (Int, Option[JsObject])
 }
 
-trait ActionProxyContainerTestUtils extends FlatSpec with Matchers {
+trait ActionProxyContainerTestUtils extends FlatSpec with Matchers with StreamLogging {
   import ActionContainer.{filterSentinel, sentinel}
 
   def initPayload(code: String, main: String = "main") = {
@@ -128,7 +131,7 @@ object ActionContainer {
   def filterSentinel(str: String) = str.replaceAll(sentinel, "").trim
 
   def withContainer(imageName: String, environment: Map[String, String] = Map.empty)(code: ActionContainer => Unit)(
-    implicit actorSystem: ActorSystem): (String, String) = {
+    implicit actorSystem: ActorSystem, logging: Logging): (String, String) = {
     val rand = { val r = Random.nextInt; if (r < 0) -r else r }
     val name = imageName.toLowerCase.replaceAll("""[^a-z]""", "") + rand
     val envArgs = environment.toSeq.map {
@@ -163,7 +166,11 @@ object ActionContainer {
     }
   }
 
-  private def syncPost(host: String, port: Int, endPoint: String, content: JsValue): (Int, Option[JsObject]) = {
+  private def syncPost(host: String, port: Int, endPoint: String, content: JsValue)(
+    implicit logging: Logging): (Int, Option[JsObject]) = {
+
+    implicit val transid = TransactionId.testing
+
     whisk.core.containerpool.HttpUtils.post(host, port, endPoint, content)
   }
 

@@ -203,8 +203,11 @@ class ActionRunner:
 
 proxy = flask.Flask(__name__)
 proxy.debug = False
+# disable re-initialization of the executable unless explicitly allowed via an environment
+# variable PROXY_ALLOW_REINIT == "1" (this is generally useful for local testing and development)
+proxy.rejectReinit = 'PROXY_ALLOW_REINIT' not in os.environ or os.environ['PROXY_ALLOW_REINIT'] != "1"
+proxy.initialized = False
 runner = None
-
 
 def setRunner(r):
     global runner
@@ -213,6 +216,13 @@ def setRunner(r):
 
 @proxy.route('/init', methods=['POST'])
 def init():
+    if proxy.rejectReinit is True and proxy.initialized is True:
+        msg = 'Cannot initialize the action more than once.'
+        sys.stderr.write(msg + '\n')
+        response = flask.jsonify({'error': msg})
+        response.status_code = 403
+        return complete(response)
+
     message = flask.request.get_json(force=True, silent=True)
     if message and not isinstance(message, dict):
         flask.abort(404)
@@ -228,6 +238,7 @@ def init():
         status = False
 
     if status is True:
+        proxy.initialized = True
         return ('OK', 200)
     else:
         response = flask.jsonify({'error': 'The action failed to generate or locate a binary. See logs for details.'})

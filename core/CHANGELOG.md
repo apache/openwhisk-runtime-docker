@@ -19,20 +19,23 @@
 
 # Apache OpenWhisk Docker Runtime Container
 
+## 1.3.1
+Changes:
+  - Disallow re-initialization by default. Added environment variable to enable re-initialization for local development.
 
 ## 1.3.0
 Changes:
-  - Added openssh-client
+  - Added openssh-client.
 
 ## 1.2.0
 Changes:
-  - Added utilties curl and wget
+  - Added utilties curl and wget.
 
 ## 1.1.0
 Changes:
-  - Allow input parameter larger than 128KB
-  - Added perl language support
-  - Added utilties jq, zip, git
+  - Allow input parameter larger than 128KB.
+  - Added perl language support.
+  - Added utilties jq, zip, git.
 
 ## 1.0.0
-Initial version
+Initial version.

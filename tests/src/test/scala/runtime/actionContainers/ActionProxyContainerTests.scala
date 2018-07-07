@@ -245,4 +245,5 @@ class ActionProxyContainerTests extends BasicActionRunnerTests with WskActorSyst
   testUnicode(stdUnicodeSamples)
   testEnv(stdEnvSamples)
   testLargeInput(stdLargeInputSamples)
+  testInitCannotBeCalledMoreThanOnce(codeNotReturningJson) // any code sample will do
 }

@@ -19,6 +19,10 @@
 
 # Apache OpenWhisk Docker Runtime Container
 
+## 1.3.2
+Changes:
+  - Fixes bug where a log maker is emitted more than once.
+
 ## 1.3.1
 Changes:
   - Disallow re-initialization by default. Added environment variable to enable re-initialization for local development.

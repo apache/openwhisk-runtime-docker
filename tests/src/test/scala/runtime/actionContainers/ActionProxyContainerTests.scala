@@ -30,13 +30,7 @@ import common.TestUtils
 import common.WskActorSystem
 import spray.json._
 
-@RunWith(classOf[JUnitRunner])
-class ActionProxyContainerTests extends BasicActionRunnerTests with WskActorSystem {
-
-  override def withActionContainer(env: Map[String, String] = Map.empty)(code: ActionContainer => Unit) = {
-    withContainer("dockerskeleton", env)(code)
-  }
-
+object CodeSamples {
   val codeNotReturningJson = """
                                |#!/bin/sh
                                |echo not a json object
@@ -149,6 +143,25 @@ class ActionProxyContainerTests extends BasicActionRunnerTests with WskActorSyst
 
     Seq(("bash", bash), ("python", python), ("perl", perl))
   }
+}
+
+@RunWith(classOf[JUnitRunner])
+class ActionProxyContainerTests extends BasicActionRunnerTests with WskActorSystem {
+
+  override def withActionContainer(env: Map[String, String] = Map.empty)(code: ActionContainer => Unit) = {
+    withContainer("dockerskeleton", env)(code)
+  }
+
+  override val testNoSourceOrExec = TestConfig("", hasCodeStub = true)
+  override val testNotReturningJson = TestConfig(CodeSamples.codeNotReturningJson, enforceEmptyOutputStream = false)
+  override val testInitCannotBeCalledMoreThanOnce = TestConfig(CodeSamples.codeNotReturningJson)
+  // the skeleton requires the executable to be called /action/exec, this test will pass with any "main"
+  override val testEntryPointOtherThanMain =
+    TestConfig(CodeSamples.stdLargeInputSamples(0)._2, main = "exec", false, true)
+  override val testEcho = TestConfig(CodeSamples.stdCodeSamples(0)._2)
+  override val testUnicode = TestConfig(CodeSamples.stdUnicodeSamples(0)._2)
+  override val testEnv = TestConfig(CodeSamples.stdEnvSamples(0)._2)
+  override val testLargeInput = TestConfig(CodeSamples.stdLargeInputSamples(0)._2)
 
   behavior of "openwhisk/dockerskeleton"
 
@@ -239,11 +252,4 @@ class ActionProxyContainerTests extends BasicActionRunnerTests with WskActorSyst
         e shouldBe empty
     })
   }
-
-  testNotReturningJson(codeNotReturningJson, checkResultInLogs = true)
-  testEcho(stdCodeSamples)
-  testUnicode(stdUnicodeSamples)
-  testEnv(stdEnvSamples)
-  testLargeInput(stdLargeInputSamples)
-  testInitCannotBeCalledMoreThanOnce(codeNotReturningJson) // any code sample will do
 }

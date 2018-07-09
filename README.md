@@ -36,7 +36,7 @@ zip myAction.zip exec
 
 Create the action using the docker image for the runtime
 ```
-wsk action update myAction myAction.zip --docker openwhisk/dockerskeleton:1.3.1
+wsk action update myAction myAction.zip --docker openwhisk/dockerskeleton:1.3.2
 ```
 
 This works on any deployment of Apache OpenWhisk

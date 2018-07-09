@@ -221,7 +221,7 @@ def init():
         sys.stderr.write(msg + '\n')
         response = flask.jsonify({'error': msg})
         response.status_code = 403
-        return complete(response)
+        return response
 
     message = flask.request.get_json(force=True, silent=True)
     if message and not isinstance(message, dict):

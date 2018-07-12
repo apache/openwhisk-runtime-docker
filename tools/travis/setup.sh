@@ -31,4 +31,5 @@ git clone https://github.com/apache/incubator-openwhisk-utilities.git
 # clone main openwhisk repo. for testing purposes
 git clone --depth=1 https://github.com/apache/incubator-openwhisk.git openwhisk
 cd openwhisk
+
 ./tools/travis/setup.sh

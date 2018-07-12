@@ -20,8 +20,7 @@ before_install:
   - "./tools/travis/setup.sh"
 install: true
 script:
-  - "./tools/travis/build.sh && ./tools/travis/build_sdk.sh && ./tools/travis/deploy.sh
-    && ./tools/travis/test.sh"
+  - "./tools/travis/build.sh && ./tools/travis/build_sdk.sh && ./tools/travis/test.sh"
 before_deploy:
   - "./tools/travis/rename_sdk.sh ${TRAVIS_TAG%@*} ${TRAVIS_TAG##*@}"
 deploy:
@@ -33,7 +32,7 @@ deploy:
       condition: "${TRAVIS_TAG%@*} = dockerskeleton || ${TRAVIS_TAG%@*} = example"
       repo: apache/incubator-openwhisk-runtime-docker
   - provider: script
-    script: "./tools/travis/publish.sh openwhisk dockerskeleton master && ./tools/travis/publish.sh openwhisk example master"
+    script: "./tools/travis/publish.sh openwhisk dockerskeleton latest && ./tools/travis/publish.sh openwhisk example latest"
     on:
       branch: master
       repo: apache/incubator-openwhisk-runtime-docker

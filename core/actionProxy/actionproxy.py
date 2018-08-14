@@ -109,9 +109,9 @@ class ActionRunner:
     def env(self, message):
         # make sure to include all the env vars passed in by the invoker
         env = os.environ
-        for p in ['api_key', 'namespace', 'action_name', 'activation_id', 'deadline']:
-            if p in message:
-                env['__OW_%s' % p.upper()] = message[p]
+        for k, v in message.items():
+            if k != 'value':
+                env['__OW_%s' % k.upper()] = v
         return env
 
     # runs the action, called iff self.verify() is True.

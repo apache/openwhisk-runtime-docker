@@ -19,6 +19,10 @@
 
 # Apache OpenWhisk Docker Runtime Container
 
+## 1.3.3
+Changes:
+  - Update run handler to accept more environment variables [#55](https://github.com/apache/incubator-openwhisk-runtime-docker/pull/55)
+
 ## 1.3.2
 Changes:
   - Fixes bug where a log maker is emitted more than once.

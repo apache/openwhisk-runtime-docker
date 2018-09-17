@@ -19,7 +19,11 @@
 
 # Apache OpenWhisk Docker Runtime Container
 
-## 1.3.3
+## Apache 1.13.0 (next release)
+Changes:
+  - Update base python image to `python:3.6-alpine`
+
+## 1.3.3 (Apache 1.12.0)
 Changes:
   - Update run handler to accept more environment variables [#55](https://github.com/apache/incubator-openwhisk-runtime-docker/pull/55)
 

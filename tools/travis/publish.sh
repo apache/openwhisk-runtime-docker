@@ -47,6 +47,15 @@ if [[ ! -z ${GRADLE_BUILD} ]] && [[ ! -z ${IMAGE_PREFIX} ]] && [[ ! -z ${IMAGE_T
   -PdockerRegistry=docker.io \
   -PdockerImagePrefix=${IMAGE_PREFIX} \
   -PdockerImageTag=${IMAGE_TAG}
+
+    # if doing latest also push a tag with the hash commit
+  if [ ${IMAGE_TAG} == "latest" ]; then
+    SHORT_COMMIT=`git rev-parse --short HEAD`
+    TERM=dumb ./gradlew \
+    ${GRADLE_BUILD} \
+    -PdockerRegistry=docker.io \
+    -PdockerImagePrefix=${IMAGE_PREFIX} \
+    -PdockerImageTag=${SHORT_COMMIT}
+  fi
+
 fi
-
-

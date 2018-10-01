@@ -24,7 +24,7 @@ RUN apk upgrade --update \
   && update-ca-certificates \
   && apk add --no-cache --virtual .build-deps bzip2-dev gcc libc-dev \
   && pip install --upgrade pip setuptools six \
-  && pip install --no-cache-dir gevent==1.2.1 flask==0.12 \
+  && pip install --no-cache-dir gevent==1.3.6 flask==1.0.2 \
   && apk del .build-deps
 
 ENV FLASK_PROXY_PORT 8080

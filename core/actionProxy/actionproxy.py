@@ -33,7 +33,7 @@ import json
 import subprocess
 import codecs
 import flask
-from gevent.wsgi import WSGIServer
+from gevent.pywsgi import WSGIServer
 import zipfile
 import io
 import base64

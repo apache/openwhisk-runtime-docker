@@ -16,7 +16,7 @@
 # limitations under the License.
 #
 
-set -e
+set -ex
 
 # Build script for Travis-CI.
 

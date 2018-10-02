@@ -27,4 +27,9 @@ WHISKDIR="$ROOTDIR/../openwhisk"
 export OPENWHISK_HOME=$WHISKDIR
 cd ${ROOTDIR}
 TERM=dumb ./gradlew :tests:checkScalafmtAll
+
+#debugging ActionContainer staleness
+unzip  ~/.m2/repository/org/apache/openwhisk/openwhisk-tests/1.0.0-SNAPSHOT/openwhisk-tests-1.0.0-SNAPSHOT-test-sources.jar actionContainers/ActionContainer.*
+cat actionContainers/ActionContainer.scala
+
 TERM=dumb ./gradlew :tests:test

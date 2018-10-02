@@ -40,4 +40,6 @@ echo "vcap.services.file=" >> whisk.properties
 
 # Build runtime
 cd $ROOTDIR
+cat ./gradle/wrapper/*.properties
+./gradlew --version
 TERM=dumb ./gradlew distDocker

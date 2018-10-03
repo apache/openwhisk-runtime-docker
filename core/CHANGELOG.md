@@ -22,6 +22,7 @@
 ## Apache 1.13.0 (next release)
 Changes:
   - Update base python image to `python:3.6-alpine`
+  - Update current directory for action to be root of zip 
 
 ## 1.3.3 (Apache 1.12.0)
 Changes:

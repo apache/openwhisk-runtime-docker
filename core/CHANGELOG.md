@@ -23,6 +23,7 @@
 Changes:
   - Update base python image to `python:3.6-alpine`
   - Update current directory for action to be root of zip
+  - Update python dependencies gevent(`1.2.1`->`1.3.6`) and flask(`0.12`->`1.0.2`)
 
 ## 1.3.3 (Apache 1.12.0)
 Changes:

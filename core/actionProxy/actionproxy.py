@@ -52,6 +52,7 @@ class ActionRunner:
         self.source = source if source else defaultBinary
         self.binary = binary if binary else defaultBinary
         self.zipdest = zipdest if zipdest else os.path.dirname(self.source)
+        os.chdir(os.path.dirname(self.source))
 
     def preinit(self):
         return

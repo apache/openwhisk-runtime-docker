@@ -252,4 +252,20 @@ class ActionProxyContainerTests extends BasicActionRunnerTests with WskActorSyst
         e shouldBe empty
     })
   }
+
+  it should "support current directory be action location" in {
+    withActionContainer() { c =>
+      val code = """
+                   |#!/bin/bash
+                   |echo "{\"pwd_env\":\"$PWD\",\"pwd_cmd\":\"$(pwd)\"}"
+                 """.stripMargin.trim
+
+      val (initCode, initRes) = c.init(initPayload(code))
+      initCode should be(200)
+
+      val (_, runRes) = c.run(runPayload(JsObject()))
+      runRes.get.fields.get("pwd_env") shouldBe Some(JsString("/action"))
+      runRes.get.fields.get("pwd_cmd") shouldBe Some(JsString("/action"))
+    }
+  }
 }

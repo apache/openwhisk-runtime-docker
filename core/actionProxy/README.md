@@ -37,4 +37,4 @@ By convention the action executable may log messages to `stdout` and `stderr`. T
 
 A return value is optional but must be a JSON object (properly serialized) if present.
 
-For an example implementation of an `ActionRunner` that overrides `epilogue()` and `build()` see the [Swift 3](../swift3Action/swift3runner.py) action proxy. An implementation of the runner for Python actions is available [here](../pythonAction/pythonrunner.py). Lastly, an example Docker action that uses `C` is available in this [example](../../sdk/docker/Dockerfile).
+For an example implementation of an `ActionRunner` that overrides `epilogue()` and `build()` see the [Swift 3](../swift3Action/swift3runner.py) action proxy. An implementation of the runner for Python actions is available [here](https://github.com/apache/incubator-openwhisk-runtime-python/blob/master/core/pythonAction/pythonrunner.py). Lastly, an example Docker action that uses `C` is available in this [example](../../sdk/docker/Dockerfile).

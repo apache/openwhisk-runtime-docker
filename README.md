@@ -27,7 +27,7 @@ Create a zip action with a `exec` in the root of the zip
 ```
 echo \
 '#!/bin/bash
-echo "{\"messag\":\"Hello World\"}"' > exec
+echo "{\"message\":\"Hello World\"}"' > exec
 ```
 ```
 chmod +x exec

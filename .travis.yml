@@ -44,12 +44,12 @@ deploy:
       tags: true
       all_branches: true
       condition: "${TRAVIS_TAG%@*} = dockerskeleton || ${TRAVIS_TAG%@*} = example"
-      repo: apache/incubator-openwhisk-runtime-docker
+      repo: apache/openwhisk-runtime-docker
   - provider: script
     script: "./tools/travis/publish.sh openwhisk dockerskeleton nightly && ./tools/travis/publish.sh openwhisk example nightly"
     on:
       branch: master
-      repo: apache/incubator-openwhisk-runtime-docker
+      repo: apache/openwhisk-runtime-docker
   - provider: releases
     api_key:
       secure: R+7PrIf0bLqcQJ9XRQX1Arnund9p0CRdn4TQbvK2kz0h69y233FS7JVa+U6mEptzUErLa90PrONDfB/iNC1YLn/pIfGsM2l34CTC0OQPgHRuY6uBg48jM7rRAM3nUHseFHF2o9Hh0zXZRI4lj+nYe1LTR0Xsn50AGtPAeIEHItv4ojGzujgeBZsjBjCSLbEGxRjP8XqAgs/PA4QrmcSXlP4fEwidEOp3wqAaTIpHRksu7nv3j8H3IpWG6M3hAYn0LJcLi5pF4jwsq85H/+BGRp0ZbVW7uZtpl/bI5T0DkmPXEI4ywcwb3w8CCFs9WMNwB9zMs5j3MFX2dzzPNLJ5ostuEY6Vwzz0tdaqEoAB7n2kLd0akKX/WJiu7Jh35Ul3tYhLpNIWmO6bjaYY7fEdtXX1WLBVIlJIEd+wfDd3a85sIFTQj1YT9os1iS4B3vc9tpbw5D51qzqSRNtoAfV3tablp5obddhKe8iLeSB41lY4Qm+K41IgwxWKiRiNXDFkOPaa3MgAanGzzouQYrbShw+k7oCg8yJqX1NH4vP1H1CAa8OCAdw4aa06xHUk9kNQfIeOl4n9pBRL5dS4VGccCKulWf6ZRo3ypmP7sJL/vbrAs/lZJNteImrm0MtCPJq/5H5eOrQ5A/Kd1hkK7kquXYsXATgVFkasHqWUH6lKurE=
@@ -60,7 +60,7 @@ deploy:
       tags: true
       all_branches: true
       condition: "${TRAVIS_TAG%@*} = sdk"
-      repo: apache/incubator-openwhisk-runtime-docker
+      repo: apache/openwhisk-runtime-docker
 env:
   global:
   - secure: DG9V6udwMMKoDbFZJCjau0KAdUTPqGCIBvrPCblpXYEH35QcpxR9MfL3A42h4AbQjsmn5sg7zIMkDI1q5Fsvo0ood8z/mrUbPldF5dEnSPwzjV/ErGoFWPdKyPvkyO567XQD2GU7ZL1GjB/marq2qS+zx7ZCbkxAJSOiDS5/c3dD2yt0QHKkMKYt5Au+qs674y2VPNM6gUwtxY8GjyE3I6MubIqmimUAHcdt+PBcIeJOF2CET01KiOUVRUaKlKgSnkKks31ojKMcwwHJue7/KJ1fbUMz1traenGKA2NoD4qR58QRYCB+W47vKvtX6K7jL7w7Ck+IJ3MJOZjP1V8GKoNhfPgxuxZpWnJaZ61iaOYLAkwqr1bicf1qkDzDXE34XouGkocOJWvU4lE9MiuP3VWhpQAeV62pDDxnD8aApmbykCuhcD6cUwbbi7UF2irnOLdDLd8wpP3OCo9faHSqmjlnzzLR+KzZoU5J7P0NXTdLOEwBIyzvQv3s0AvxNazUR7vfA+HDU4qM1dyfKUKBJegAcbWSRpiH593FnWXYDWIn0Ib9ygnk68EfyEFTc4Ns3IZrYIJkOtdXcevU6vpQf8HFwJUxOJOeEKjbu/xNKWTjceBzsgMIk8eq4+Z4Ye84rPI3oQ99UoQlX3QjOyfgHzTH+mctotHM7V8puW3V2wQ=

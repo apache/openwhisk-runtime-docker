@@ -27,7 +27,7 @@ Changes:
 
 ## 1.3.3 (Apache 1.12.0)
 Changes:
-  - Update run handler to accept more environment variables [#55](https://github.com/apache/incubator-openwhisk-runtime-docker/pull/55)
+  - Update run handler to accept more environment variables [#55](https://github.com/apache/openwhisk-runtime-docker/pull/55)
 
 ## 1.3.2
 Changes:

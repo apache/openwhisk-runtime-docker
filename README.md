@@ -19,7 +19,7 @@
 
 # Apache OpenWhisk runtimes for docker
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
-[![Build Status](https://travis-ci.org/apache/incubator-openwhisk-runtime-docker.svg?branch=master)](https://travis-ci.org/apache/incubator-openwhisk-runtime-docker)
+[![Build Status](https://travis-ci.org/apache/openwhisk-runtime-docker.svg?branch=master)](https://travis-ci.org/apache/openwhisk-runtime-docker)
 
 
 ### Give it a try today
@@ -92,7 +92,3 @@ Then create the action using your image from dockerhub
 wsk action update myAction myAction.zip --docker $user_prefix/dockerskeleton
 ```
 The `$user_prefix` is usually your dockerhub user id.
-
-# Disclaimer
-
-Apache OpenWhisk Runtime Docker is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.

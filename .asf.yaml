@@ -16,7 +16,7 @@
 #
 
 github:
-  description: "Apache OpenWhisk SDK for building Docker "blackbox" runtimes"
+  description: "Apache OpenWhisk SDK for building Docker \"blackbox\" runtimes"
   homepage: https://openwhisk.apache.org/
   labels:
   - openwhisk

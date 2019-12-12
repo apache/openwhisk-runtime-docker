@@ -85,22 +85,23 @@ object CodeSamples {
 
   /** Standard code samples, should print 'hello' to stdout and echo the input args. */
   val stdEnvSamples = {
-    val bash = """
-                 |#!/bin/bash
-                 |echo "{ \
-                 |\"api_host\": \"$__OW_API_HOST\", \"api_key\": \"$__OW_API_KEY\", \
-                 |\"namespace\": \"$__OW_NAMESPACE\", \"action_name\": \"$__OW_ACTION_NAME\", \
-                 |\"activation_id\": \"$__OW_ACTIVATION_ID\", \"deadline\": \"$__OW_DEADLINE\" }"
-               """.stripMargin.trim
+    val bash =
+      """
+        |#!/bin/bash
+        |echo "{ \
+        |\"api_host\": \"$__OW_API_HOST\", \"api_key\": \"$__OW_API_KEY\", \
+        |\"namespace\": \"$__OW_NAMESPACE\", \"action_name\": \"$__OW_ACTION_NAME\", \"action_version\": \"$__OW_ACTION_VERSION\", \
+        |\"activation_id\": \"$__OW_ACTIVATION_ID\", \"deadline\": \"$__OW_DEADLINE\" }"
+      """.stripMargin.trim
 
     val python =
       """
         |#!/usr/bin/env python
         |import os
         |
-        |print('{ "api_host": "%s", "api_key": "%s", "namespace": "%s", "action_name" : "%s", "activation_id": "%s", "deadline": "%s" }' % (
+        |print('{ "api_host": "%s", "api_key": "%s", "namespace": "%s", "action_name" : "%s", action_version" : "%s", "activation_id": "%s", "deadline": "%s" }' % (
         |  os.environ['__OW_API_HOST'], os.environ['__OW_API_KEY'],
-        |  os.environ['__OW_NAMESPACE'], os.environ['__OW_ACTION_NAME'],
+        |  os.environ['__OW_NAMESPACE'], os.environ['__OW_ACTION_NAME'], os.environ['__OW_ACTION_VERSION'],
         |  os.environ['__OW_ACTIVATION_ID'], os.environ['__OW_DEADLINE']))
       """.stripMargin.trim
 
@@ -111,9 +112,10 @@ object CodeSamples {
         |$b = $ENV{'__OW_API_KEY'};
         |$c = $ENV{'__OW_NAMESPACE'};
         |$d = $ENV{'__OW_ACTION_NAME'};
+        |$r = $ENV{'__OW_ACTION_VERSION'};
         |$e = $ENV{'__OW_ACTIVATION_ID'};
         |$f = $ENV{'__OW_DEADLINE'};
-        |print "{ \"api_host\": \"$a\", \"api_key\": \"$b\", \"namespace\": \"$c\", \"action_name\": \"$d\", \"activation_id\": \"$e\", \"deadline\": \"$f\" }";
+        |print "{ \"api_host\": \"$a\", \"api_key\": \"$b\", \"namespace\": \"$c\", \"action_name\": \"$d\", \"action_version\": \"$r\", \"activation_id\": \"$e\", \"deadline\": \"$f\" }";
       """.stripMargin.trim
 
     Seq(("bash", bash), ("python", python), ("perl", perl))

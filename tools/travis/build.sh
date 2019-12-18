@@ -33,7 +33,7 @@ scancode/scanCode.py --config scancode/ASF-Release.cfg $ROOTDIR
 
 # Build OpenWhisk deps before we run tests
 cd $WHISKDIR
-TERM=dumb ./gradlew install
+TERM=dumb ./gradlew install tests:buildArtifacts
 # Mock file (works around bug upstream)
 echo "openwhisk.home=$WHISKDIR" > whisk.properties
 echo "vcap.services.file=" >> whisk.properties

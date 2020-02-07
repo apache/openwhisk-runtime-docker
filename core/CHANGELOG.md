@@ -19,13 +19,19 @@
 
 # Apache OpenWhisk Docker Runtime Container
 
-## Apache 1.13.0 (next release)
+## 1.14.0
+  - Support for __OW_ACTION_VERSION (openwhisk/4761)
+
+## 1.13.0-incubating
 Changes:
   - Update base python image to `python:3.6-alpine`
   - Update current directory for action to be root of zip
   - Update python dependencies gevent(`1.2.1`->`1.3.6`) and flask(`0.12`->`1.0.2`)
 
-## 1.3.3 (Apache 1.12.0)
+## 1.12.0-incubating
+  - First Apache incubator release
+
+## 1.3.3
 Changes:
   - Update run handler to accept more environment variables [#55](https://github.com/apache/openwhisk-runtime-docker/pull/55)
 

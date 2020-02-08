@@ -29,8 +29,11 @@ RUN apk upgrade --update \
 
 ENV FLASK_PROXY_PORT 8080
 
-RUN mkdir -p /actionProxy
+RUN mkdir -p /actionProxy/owplatform
 ADD actionproxy.py /actionProxy/
+ADD owplatform/__init__.py /actionProxy/owplatform/
+ADD owplatform/knative.py /actionProxy/owplatform/
+ADD owplatform/openwhisk.py /actionProxy/owplatform/
 
 RUN mkdir -p /action
 ADD stub.sh /action/exec

@@ -27,17 +27,27 @@ code when required.
  */
 """
 
-import sys
-import os
-import json
-import subprocess
+import base64
 import codecs
+import io
+import json
+import os
+import subprocess
+import sys
+import zipfile
+
 import flask
 from gevent.pywsgi import WSGIServer
-import zipfile
-import io
-import base64
 
+# The following import is only needed if we actually want to use the factory pattern.
+# See comment below for reasons we decided to bypass it.
+#from owplatform import PlatformFactory, InvalidPlatformError
+from owplatform.knative import KnativeImpl
+from owplatform.openwhisk import OpenWhiskImpl
+
+PLATFORM_OPENWHISK = 'openwhisk'
+PLATFORM_KNATIVE = 'knative'
+DEFAULT_PLATFORM = PLATFORM_OPENWHISK
 
 class ActionRunner:
     """ActionRunner."""
@@ -215,8 +225,7 @@ def setRunner(r):
     runner = r
 
 
-@proxy.route('/init', methods=['POST'])
-def init():
+def init(message=None):
     if proxy.rejectReinit is True and proxy.initialized is True:
         msg = 'Cannot initialize the action more than once.'
         sys.stderr.write(msg + '\n')
@@ -224,7 +233,7 @@ def init():
         response.status_code = 403
         return response
 
-    message = flask.request.get_json(force=True, silent=True)
+    message = message or flask.request.get_json(force=True, silent=True)
     if message and not isinstance(message, dict):
         flask.abort(404)
     else:
@@ -247,14 +256,15 @@ def init():
         return complete(response)
 
 
-@proxy.route('/run', methods=['POST'])
-def run():
+def run(message=None):
     def error():
         response = flask.jsonify({'error': 'The action did not receive a dictionary as an argument.'})
         response.status_code = 404
         return complete(response)
 
-    message = flask.request.get_json(force=True, silent=True)
+    # If we have a message use that, if not try using the request json if it exists (returns None on no JSON)
+    # otherwise just make it an empty dictionary
+    message = message or flask.request.get_json(force=True, silent=True) or {}
     if message and not isinstance(message, dict):
         return error()
     else:
@@ -264,9 +274,14 @@ def run():
 
     if runner.verify():
         try:
-            code, result = runner.run(args, runner.env(message or {}))
-            response = flask.jsonify(result)
-            response.status_code = code
+            if 'activation' in message:
+                code, result = runner.run(args, runner.env(message['activation'] or {}))
+                response = flask.jsonify(result)
+                response.status_code = code
+            else:
+                code, result = runner.run(args, runner.env(message or {}))
+                response = flask.jsonify(result)
+                response.status_code = code
         except Exception as e:
             response = flask.jsonify({'error': 'Internal error. {}'.format(e)})
             response.status_code = 500
@@ -286,6 +301,36 @@ def complete(response):
 
 
 def main():
+# This is for future users. If there ever comes a time where more platforms are implemented or where
+# speed is less of a concern it is advisable to use the factory pattern described below. As for now
+# we have decided the trade off in speed is not worth it. In runtimes, milliseconds matter!
+#
+#    platformImpl = None
+#    PlatformFactory.addPlatform(PLATFORM_OPENWHISK, OpenWhiskImpl)
+#    PlatformFactory.addPlatform(PLATFORM_KNATIVE, KnativeImpl)
+#
+#    targetPlatform = os.getenv('__OW_RUNTIME_PLATFORM', DEFAULT_PLATFORM)
+#    if not PlatformFactory.isSupportedPlatform(targetPlatform):
+#        raise InvalidPlatformError(targetPlatform, PlatformFactory.supportedPlatforms())
+#    else:
+#        platformFactory = PlatformFactory()
+#        platformImpl = platformFactory.createPlatformImpl(targetPlatform, proxy)
+#    platformImpl.registerHandlers(init, run)
+
+    platformImpl = None
+    targetPlatform = os.getenv('__OW_RUNTIME_PLATFORM', DEFAULT_PLATFORM).lower()
+    # Target Knative if it specified, otherwise just default to OpenWhisk.
+    if targetPlatform == PLATFORM_KNATIVE:
+        platformImpl = KnativeImpl(proxy)
+    else:
+        platformImpl = OpenWhiskImpl(proxy)
+        if targetPlatform != PLATFORM_OPENWHISK:
+            print(f"Invalid __OW_RUNTIME_PLATFORM {targetPlatform}! " +
+                  f"Valid Platforms are {PLATFORM_OPENWHISK} and {PLATFORM_KNATIVE}. " +
+                  f"Defaulting to {PLATFORM_OPENWHISK}.", file=sys.stderr)
+
+    platformImpl.registerHandlers(init, run)
+
     port = int(os.getenv('FLASK_PROXY_PORT', 8080))
     server = WSGIServer(('0.0.0.0', port), proxy, log=None)
     server.serve_forever()

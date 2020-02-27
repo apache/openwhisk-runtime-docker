@@ -108,7 +108,7 @@ def preProcessHTTPContext(msg, valueData):
             tmpBody = msg.get('value', {})
             removeInitData(tmpBody)
             bodyStr = str(tmpBody)
-            valueData['__ow_body'] = base64.b64encode(bodyStr)
+            valueData['__ow_body'] = base64.b64encode(bodyStr.encode())
         valueData['__ow_query'] = flask.request.query_string
 
     namespace = ''
@@ -116,7 +116,7 @@ def preProcessHTTPContext(msg, valueData):
         namespace = os.getenv('__OW_NAMESPACE')
     valueData['__ow_user'] = namespace
     valueData['__ow_method'] = flask.request.method
-    valueData['__ow_headers'] = flask.request.headers
+    valueData['__ow_headers'] = { k: v for k, v in flask.request.headers.items() }
     valueData['__ow_path'] = ''
 
 def preProcessActivationData(activationData):
@@ -239,21 +239,18 @@ class KnativeImpl:
                 message['init'] = createInitDataFromEnvironment()
                 dedicated_runtime = True
 
+            preProcessRequest(message)
             if hasInitData(message) and hasActivationData(message) and not dedicated_runtime:
-                preProcessRequest(message)
                 self.initCode(message)
                 removeInitData(message)
                 response = self.runCode(message)
                 response = postProcessResponse(request_headers, response)
             elif hasInitData(message) and not dedicated_runtime:
-                preProcessRequest(message)
                 response = self.initCode(message)
             elif hasActivationData(message) and not dedicated_runtime:
-                preProcessRequest(message)
                 response = self.runCode(message)
                 response = postProcessResponse(request_headers, response)
             else:
-                preProcessRequest(message)
                 # This is for the case when it is a dedicated runtime, but has not yet been
                 # initialized from the environment
                 if dedicated_runtime and self.proxy.initialized is False:

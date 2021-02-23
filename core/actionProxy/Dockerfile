@@ -22,7 +22,7 @@ FROM python:3.6-alpine
 RUN apk upgrade --update \
   && apk add --no-cache bash perl jq zip git curl wget openssl ca-certificates sed openssh-client \
   && update-ca-certificates \
-  && apk add --no-cache --virtual .build-deps bzip2-dev gcc libc-dev \
+  && apk add --no-cache --virtual .build-deps bzip2-dev g++ libc-dev \
   && pip install --upgrade pip setuptools six \
   && pip install --no-cache-dir gevent==1.3.6 flask==1.0.2 \
   && apk del .build-deps

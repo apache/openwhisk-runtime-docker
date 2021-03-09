@@ -61,7 +61,7 @@ docker login
 ```
 
 Deploy OpenWhisk using ansible environment that contains the runtime of type `blackboxes` with name `dockerskeleton`
-Assuming you have OpenWhisk already deploy localy and `OPENWHISK_HOME` pointing to root directory of OpenWhisk core repository.
+Assuming you have OpenWhisk already deploy locally and `OPENWHISK_HOME` pointing to root directory of OpenWhisk core repository.
 
 Set `ROOTDIR` to the root directory of this repository.
 

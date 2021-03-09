@@ -31,5 +31,5 @@ echo 'command line argument length: '${#1}
 read inputstring
 echo 'stdin input length: '${#inputstring}
 
-# last line of output = ation result
+# last line of output = action result
 echo '{ "error": "This is a stub action. Replace it with custom logic." }'

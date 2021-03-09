@@ -49,13 +49,13 @@ Changes:
 
 ## 1.2.0
 Changes:
-  - Added utilties curl and wget.
+  - Added utilities curl and wget.
 
 ## 1.1.0
 Changes:
   - Allow input parameter larger than 128KB.
   - Added perl language support.
-  - Added utilties jq, zip, git.
+  - Added utilities jq, zip, git.
 
 ## 1.0.0
 Initial version.

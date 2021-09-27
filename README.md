@@ -19,7 +19,7 @@
 
 # Apache OpenWhisk runtimes for docker
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
-[![Build Status](https://travis-ci.com/apache/openwhisk-runtime-docker.svg?branch=master)](https://travis-ci.com/apache/openwhisk-runtime-docker)
+[![Build Status](https://travis-ci.com/apache/openwhisk-runtime-docker.svg?branch=master)](https://travis-ci.com/github/apache/openwhisk-runtime-docker)
 
 
 ### Give it a try today

@@ -16,16 +16,24 @@
 #
 
 # Dockerfile for docker skeleton (useful for running blackbox binaries, scripts, or Python 3 actions) .
-FROM python:3.6-alpine
+FROM ubuntu:21.10
+#CMD ["tail", "-f", "/dev/null"]
 
-# Upgrade and install basic Python dependencies.
-RUN apk upgrade --update \
-  && apk add --no-cache bash perl jq zip git curl wget openssl ca-certificates sed openssh-client \
-  && update-ca-certificates \
-  && apk add --no-cache --virtual .build-deps bzip2-dev g++ libc-dev \
-  && pip install --upgrade pip setuptools six \
-  && pip install --no-cache-dir gevent==1.3.6 flask==1.0.2 \
-  && apk del .build-deps
+RUN apt -y update
+RUN apt -y upgrade
+RUN ln -s /usr/share/zoneinfo/Europe/Bratislava /etc/localtime
+RUN apt -y install tzdata
+RUN apt -y install python python3
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python2 1
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 2
+RUN apt -y install perl jq zip git curl wget openssl ca-certificates sed openssh-client
+RUN update-ca-certificates
+RUN apt -y install bzip2 libbz2-dev g++ libc-dev
+RUN apt -y install pip
+RUN pip install --upgrade pip setuptools six
+RUN pip install --no-cache-dir gevent flask
+RUN DEBIAN_FRONTEND=noninteractive apt-get install keyboard-configuration
+RUN apt -y install hugin hugin-data hugin-tools
 
 ENV FLASK_PROXY_PORT 8080
 

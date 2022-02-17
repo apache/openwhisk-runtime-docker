@@ -1,0 +1,2 @@
+#! /bin/bash
+docker exec -it hugin bash -c "cd /source && hugin_executor --stitching test.pto"

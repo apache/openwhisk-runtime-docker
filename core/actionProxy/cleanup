@@ -1,0 +1,4 @@
+#! /bin/bash
+docker stop hugin
+docker rm hugin
+docker rmi hugin:0.3

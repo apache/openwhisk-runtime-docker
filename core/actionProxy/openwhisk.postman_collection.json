@@ -1,0 +1,65 @@
+{
+	"info": {
+		"_postman_id": "41a5363b-76a8-40bd-8555-906bd0c1aca3",
+		"name": "openwhisk",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "init",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"value\": {\n    \"binary\": true,\n    \"code\": \"UEsDBAoAAAAAAOlqMEr1+JNAQQAAAEEAAAAEABwAZXhlY1VUCQADRcl8WFDJfFh1eAsAAQT1AQAABBQAAAAjIS9iaW4vYmFzaAplY2hvICJ7IFwiaGVsbG9cIjogXCJyYW4gd2l0aG91dCBhIGRvY2tlciBwdWxsIVwiIH0iClBLAQIeAwoAAAAAAOlqMEr1+JNAQQAAAEEAAAAEABgAAAAAAAEAAADtgQAAAABleGVjVVQFAANFyXxYdXgLAAEE9QEAAAQUAAAAUEsFBgAAAAABAAEASgAAAH8AAAAAAA==\"\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/init",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"init"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "run",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"value\": {\n    \"foo\": \"bar\"\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/run",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"run"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

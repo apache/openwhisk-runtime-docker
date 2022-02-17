@@ -4,7 +4,7 @@ Nas hugin docker image s openWhisk actionProxy sa vytvara, spusta, testuje a cis
 
 build - zbuilduje docker image z existujuceho Dockerfile, nazve ho hugin:0.3. Tento krok trva dlho, aj 10-15 minut.
 run - spusti kontajner s image hugin:0.3, nazvany hugin, s mountnutym adresarom test (ako /source v kontajneri) a s exponovanym portom 8080 na ktorom bezi actionProxy
-ow_ap_init - inicializacia openWhisk akcie (zmena skriptu). Zavolanie by malo vratit len "OK". Treba mat nainstalovany curl, alebo to prepisat na iny tool (alebo pouzit napr Postman)
-ow_ap_run - testovacie zavolanie openWhisk actionProxy, to co robi openWhisk pri zavolani action. Malo by vratit {"hello":"ran without a docker pull!"}. Treba mat nainstalovany curl, alebo to prepisat na iny tool (alebo pouzit napr Postman)
+ow_ap_init - inicializacia openWhisk akcie (zmena skriptu). Zavolanie by malo vratit len "OK". Treba mat nainstalovany curl, alebo to prepisat na iny tool, alebo pouzit Postman a prilozenu kolekciu volani openwhisk.postman_collection.json
+ow_ap_run - testovacie zavolanie openWhisk actionProxy, to co robi openWhisk pri zavolani action. Malo by vratit {"hello":"ran without a docker pull!"}. Treba mat nainstalovany curl, alebo to prepisat na iny tool, alebo pouzit Postman a prilozenu kolekciu volani openwhisk.postman_collection.json
 test_hugin - otestovanie stitchingu. Novy hugin uz nema pto2mk, pouziva sa hugin_executor --stitching <nazov_pto_suboru>. vysledkom by malo byt vytvorenie zositej panoramy v adresari test
 cleanup - zastavi kontajner hugin, zmaze ho. Zmazanie image hugin:0.3 je zakomentovane aby sa dal znovu spustat a testovat bez buildovania, ktore trva dost dlho

@@ -242,16 +242,18 @@ def init(message=None):
     if not isinstance(value, dict):
         flask.abort(404)
 
+    errstr = ''
     try:
         status = runner.init(value)
     except Exception as e:
+        errstr = str(e)
         status = False
 
     if status is True:
         proxy.initialized = True
         return ('OK', 200)
     else:
-        response = flask.jsonify({'error': 'The action failed to generate or locate a binary. See logs for details.'})
+        response = flask.jsonify({'error': 'The action failed to generate or locate a binary: ' + errstr})
         response.status_code = 502
         return complete(response)
 

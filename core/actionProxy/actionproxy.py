@@ -49,6 +49,8 @@ PLATFORM_OPENWHISK = 'openwhisk'
 PLATFORM_KNATIVE = 'knative'
 DEFAULT_PLATFORM = PLATFORM_OPENWHISK
 
+aplog = []
+
 class ActionRunner:
     """ActionRunner."""
     LOG_SENTINEL = 'XXX_THE_END_OF_A_WHISK_ACTIVATION_XXX'
@@ -83,6 +85,7 @@ class ActionRunner:
                 else:
                     return self.initCodeFromZip(message)
             else:
+                aplog.append('\'code\' element not found in init message')
                 return False
 
         if prep():
@@ -91,11 +94,14 @@ class ActionRunner:
                 # the message is passed along as it may contain other
                 # fields relevant to a specific container.
                 if self.epilogue(message) is False:
+                    aplog.append('epilogue() failed')
                     return False
                 # build the source
                 if self.build(message) is False:
+                    aplog.append('build() failed')
                     return False
-            except Exception:
+            except Exception as e:
+                aplog.append('Exception: ' + str(e))
                 return False
         # verify the binary exists and is executable
         return self.verify()
@@ -110,8 +116,11 @@ class ActionRunner:
 
     # @return True iff binary exists and is executable, False otherwise
     def verify(self):
-        return (os.path.isfile(self.binary) and
-                os.access(self.binary, os.X_OK))
+        if os.path.isfile(self.binary) and os.access(self.binary, os.X_OK):
+            return True
+        else:
+            aplog.append('verification of action file failed (not present or access denied)')
+            return False
 
     # constructs an environment for the action to run in
     # @param message is a JSON object received from invoker (should
@@ -246,14 +255,14 @@ def init(message=None):
     try:
         status = runner.init(value)
     except Exception as e:
-        errstr = str(e)
+        aplog.append('Exception: ' + str(e))
         status = False
 
     if status is True:
         proxy.initialized = True
         return ('OK', 200)
     else:
-        response = flask.jsonify({'error': 'The action failed to generate or locate a binary: ' + errstr})
+        response = flask.jsonify({'error': 'The action failed to generate or locate a binary: ' + str(aplog)})
         response.status_code = 502
         return complete(response)
 

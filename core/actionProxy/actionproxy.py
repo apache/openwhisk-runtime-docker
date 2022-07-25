@@ -135,7 +135,7 @@ class ActionRunner:
         def error(msg):
             # fall through (exception and else case are handled the same way)
             sys.stdout.write('%s\n' % msg)
-            return (502, {'error': 'The action did not return a dictionary.'})
+            return (502, {'error': 'The action did not return a dictionary or array.'})
 
         try:
             input = json.dumps(args)
@@ -186,7 +186,7 @@ class ActionRunner:
 
         try:
             json_output = json.loads(lastLine)
-            if isinstance(json_output, dict):
+            if isinstance(json_output, dict) or isinstance(json_output, list):
                 return (200, json_output)
             else:
                 return error(lastLine)
@@ -258,7 +258,7 @@ def init(message=None):
 
 def run(message=None):
     def error():
-        response = flask.jsonify({'error': 'The action did not receive a dictionary as an argument.'})
+        response = flask.jsonify({'error': 'The action did not receive a dictionary or array as an argument.'})
         response.status_code = 404
         return complete(response)
 
@@ -269,7 +269,7 @@ def run(message=None):
         return error()
     else:
         args = message.get('value', {}) if message else {}
-        if not isinstance(args, dict):
+        if not (isinstance(args, dict) or isinstance(args, list)):
             return error()
 
     if runner.verify():

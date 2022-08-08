@@ -29,6 +29,21 @@ echo \
 '#!/bin/bash
 echo "{\"message\":\"Hello World\"}"' > exec
 ```
+
+For the return result, not only support `dictionary` but also support `array`
+```
+echo \
+'#!/bin/bash
+echo '["a", "b"]'' > exec
+```
+
+And support array result for sequence action as well, the first action's array result can be used as next action's input parameter
+```
+echo \
+'#!/bin/bash
+echo $1' > exec
+```
+
 ```
 chmod +x exec
 zip myAction.zip exec

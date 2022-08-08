@@ -271,7 +271,7 @@ class ActionProxyContainerTests extends BasicActionRunnerTests with WskActorSyst
     }
   }
 
-  it should "support array result" in {
+  it should "support return array result" in {
     withActionContainer() { c =>
       val code = """
                    |#!/bin/bash
@@ -281,7 +281,24 @@ class ActionProxyContainerTests extends BasicActionRunnerTests with WskActorSyst
       val (initCode, initRes) = c.init(initPayload(code))
       initCode should be(200)
 
-      val (runCode, runRes) = c.runForJsArray(JsObject())
+      val (runCode, runRes) = c.runForJsArray(runPayload(JsObject()))
+      runCode should be(200)
+      runRes shouldBe Some(JsArray(JsString("a"), JsString("b")))
+    }
+  }
+
+  it should "support array as input param" in {
+    withActionContainer() { c =>
+      val code = """
+                   |#!/bin/bash
+                   |arr=$1
+                   |echo $arr
+                 """.stripMargin.trim
+
+      val (initCode, initRes) = c.init(initPayload(code))
+      initCode should be(200)
+
+      val (runCode, runRes) = c.runForJsArray(runPayload(JsArray(JsString("a"), JsString("b"))))
       runCode should be(200)
       runRes shouldBe Some(JsArray(JsString("a"), JsString("b")))
     }

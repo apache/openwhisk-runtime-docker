@@ -227,7 +227,7 @@ class ActionProxyContainerTests extends BasicActionRunnerTests with WskActorSyst
       initCode should be(200)
       val (runCode, out) = c.run(JsNull)
       runCode should be(502)
-      out should be(Some(JsObject("error" -> JsString("The action did not return a dictionary."))))
+      out should be(Some(JsObject("error" -> JsString("The action did not return a dictionary or array."))))
     }
 
     checkStreams(out, err, {
@@ -268,6 +268,39 @@ class ActionProxyContainerTests extends BasicActionRunnerTests with WskActorSyst
       val (_, runRes) = c.run(runPayload(JsObject()))
       runRes.get.fields.get("pwd_env") shouldBe Some(JsString("/action"))
       runRes.get.fields.get("pwd_cmd") shouldBe Some(JsString("/action"))
+    }
+  }
+
+  it should "support return array result" in {
+    withActionContainer() { c =>
+      val code = """
+                   |#!/bin/bash
+                   |echo '["a", "b"]'
+                 """.stripMargin.trim
+
+      val (initCode, initRes) = c.init(initPayload(code))
+      initCode should be(200)
+
+      val (runCode, runRes) = c.runForJsArray(runPayload(JsObject()))
+      runCode should be(200)
+      runRes shouldBe Some(JsArray(JsString("a"), JsString("b")))
+    }
+  }
+
+  it should "support array as input param" in {
+    withActionContainer() { c =>
+      val code = """
+                   |#!/bin/bash
+                   |arr=$1
+                   |echo $arr
+                 """.stripMargin.trim
+
+      val (initCode, initRes) = c.init(initPayload(code))
+      initCode should be(200)
+
+      val (runCode, runRes) = c.runForJsArray(runPayload(JsArray(JsString("a"), JsString("b"))))
+      runCode should be(200)
+      runRes shouldBe Some(JsArray(JsString("a"), JsString("b")))
     }
   }
 }

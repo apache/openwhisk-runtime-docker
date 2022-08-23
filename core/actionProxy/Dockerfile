@@ -16,14 +16,14 @@
 #
 
 # Dockerfile for docker skeleton (useful for running blackbox binaries, scripts, or Python 3 actions) .
-FROM ubuntu:21.10
+FROM ubuntu:22.04
 #CMD ["tail", "-f", "/dev/null"]
 
 RUN apt -y update
 RUN apt -y upgrade
 RUN ln -s /usr/share/zoneinfo/Europe/Bratislava /etc/localtime
-RUN apt -y install tzdata
-RUN apt -y install python python3
+RUN apt -y install tzdata software-properties-common
+RUN apt -y install python2 python3
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python2 1
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 2
 RUN apt -y install perl jq zip git curl wget openssl ca-certificates sed openssh-client
@@ -33,6 +33,7 @@ RUN apt -y install pip
 RUN pip install --upgrade pip setuptools six
 RUN pip install --no-cache-dir gevent flask
 RUN DEBIAN_FRONTEND=noninteractive apt-get install keyboard-configuration
+RUN add-apt-repository -y ppa:ubuntuhandbook1/apps
 RUN apt -y install hugin hugin-data hugin-tools
 
 ENV FLASK_PROXY_PORT 8080

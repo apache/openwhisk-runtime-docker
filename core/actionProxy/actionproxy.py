@@ -45,6 +45,8 @@ from gevent.pywsgi import WSGIServer
 from owplatform.knative import KnativeImpl
 from owplatform.openwhisk import OpenWhiskImpl
 
+import settings
+
 PLATFORM_OPENWHISK = 'openwhisk'
 PLATFORM_KNATIVE = 'knative'
 DEFAULT_PLATFORM = PLATFORM_OPENWHISK
@@ -60,7 +62,7 @@ class ActionRunner:
     # @param binary the path where the binary will be located (may be the
     # same as source code path)
     def __init__(self, source=None, binary=None, zipdest=None):
-        defaultBinary = '/action/exec'
+        defaultBinary = os.path.join(settings.action_dir, settings.action_file)
         self.source = source if source else defaultBinary
         self.binary = binary if binary else defaultBinary
         self.zipdest = zipdest if zipdest else os.path.dirname(self.source)
@@ -336,8 +338,8 @@ def main():
     else:
         platformImpl = OpenWhiskImpl(proxy)
         if targetPlatform != PLATFORM_OPENWHISK:
-            print(f"Invalid __OW_RUNTIME_PLATFORM {targetPlatform}! " +
-                  f"Valid Platforms are {PLATFORM_OPENWHISK} and {PLATFORM_KNATIVE}. " +
+            print(f"Invalid __OW_RUNTIME_PLATFORM {targetPlatform}! "
+                  f"Valid Platforms are {PLATFORM_OPENWHISK} and {PLATFORM_KNATIVE}. "
                   f"Defaulting to {PLATFORM_OPENWHISK}.", file=sys.stderr)
 
     platformImpl.registerHandlers(init, run)

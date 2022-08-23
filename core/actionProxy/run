@@ -1,3 +1,3 @@
 #! /bin/bash
-docker run -d -p 8080:8080 --name hugin -v "$(pwd)"/test:/source hugin:0.3
+docker run -d -p 8080:8080 --name hugin -v "$(pwd)"/test:/source ondrejh/hugin:0.7
 docker ps

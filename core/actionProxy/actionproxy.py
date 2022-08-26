@@ -146,7 +146,7 @@ class ActionRunner:
         def error(msg):
             # fall through (exception and else case are handled the same way)
             sys.stdout.write('%s\n' % msg)
-            return (502, {'error': 'The action did not return a dictionary.'})
+            return (502, {'error': 'The action did not return a dictionary, error: {}'.format(msg)})
 
         try:
             input = json.dumps(args)
@@ -165,6 +165,7 @@ class ActionRunner:
                     stdin=subprocess.PIPE,
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
+                    shell=True,
                     env=env)
             # run the process and wait until it completes.
             # stdout/stderr will always be set because we passed PIPEs to Popen

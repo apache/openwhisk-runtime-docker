@@ -1,6 +1,9 @@
 #! /usr/bin/python
-
+import json
 import re
+import time
+import settings
+
 import requests
 from bs4 import BeautifulSoup
 from requests.auth import HTTPBasicAuth
@@ -11,7 +14,8 @@ import sys
 
 def main(args):
     client = init_client()
-    get_folder(client, "2021", "11", "30", "18", "00")
+    arg_dict = json.loads(args[1])
+    get_folder(client, arg_dict['year'], arg_dict['month'], arg_dict['day'], arg_dict['hour'], arg_dict['minute'])
     execute_hugin_stitch()
     cleanup_working_directory()
     post_result(client)
@@ -39,17 +43,18 @@ def get_and_save_image_locally(year, month, day, hour, minutes):
     
 def init_client():
     options = {
-    'webdav_hostname':"https://mesos.ui.sav.sk:444/remote.php/webdav/",
-    'webdav_login':    "username",
-    'webdav_password': "password"
+    'webdav_hostname':settings.webdav_hostname,
+    'webdav_login': settings.webdav_login,
+    'webdav_password': settings.webdav_password
     }
     client = Client(options)
     client.list()
     return client
 
-def move_files_to_working_directory(source_dir):
-    target_dir = 'C:/Users/lukasu/Documents/sav/hugin-0.7/hugin/wrk/'
-    
+def move_files_to_directory(source_dir, target_dir):
+    target_dir = settings.working_dir
+    #shutil.rmtree(target_dir, ignore_errors=True)
+    #os.makedirs(target_dir)
     file_names = os.listdir(source_dir)
     for file_name in file_names:
         shutil.move(os.path.join(source_dir, file_name), target_dir)
@@ -57,19 +62,21 @@ def move_files_to_working_directory(source_dir):
 def get_folder(client, year, month, day, hour, minutes):
     date = "/" + year + "/" + month + "/" + day + "/" + hour + minutes + "/"
     path = "/Microstep/" + date + "/90_FULLHD/"
-    client.download_sync(remote_path=path, local_path="/tmp_img/") #C:/Users/lukasu/Documents/sav/hugin-0.7/hugin/tmp/
-    move_files_to_working_directory("/tmp_img/")
-    client.download_sync(remote_path="/Microstep/hugin/pto/", local_path="/tmp_pto/")
-    move_files_to_working_directory("/tmp_pto/")
+    shutil.rmtree(settings.working_dir, ignore_errors=True)
+    os.makedirs(settings.working_dir)
+    client.download_sync(remote_path=path, local_path=settings.tmp_img) #C:/Users/lukasu/Documents/sav/hugin-0.7/hugin/tmp/
+    move_files_to_directory(settings.tmp_img, settings.working_dir)
+    client.download_sync(remote_path="/Microstep/hugin/pto/", local_path=settings.tmp_pto)
+    move_files_to_directory(settings.tmp_pto, settings.working_dir)
 
 def post_result(client):
-    client.upload_sync(remote_path="/Microstep/hugin/result/", local_path="/wrk/")
+    client.upload_sync(remote_path="/Microstep/hugin/result/", local_path=settings.working_dir)
 
 def execute_hugin_stitch():
-    os.system('docker exec -it hugin bash -c "cd /wrk && hugin_executor --stitching project.pto"')
+    os.system('bash -c "cd {} && hugin_executor --stitching project.pto"'.format(settings.working_dir))
     
 def cleanup_working_directory():
-    folder = "/wrk/"
+    folder = settings.working_dir
     for filename in os.listdir(folder):
         file_path = os.path.join(folder, filename)
         try:

@@ -31,7 +31,7 @@ RUN update-ca-certificates
 RUN apt -y install bzip2 libbz2-dev g++ libc-dev
 RUN apt -y install pip
 RUN pip install --upgrade pip setuptools six
-RUN pip install --no-cache-dir gevent flask
+RUN pip install --no-cache-dir -r requirements.txt
 RUN DEBIAN_FRONTEND=noninteractive apt-get install keyboard-configuration
 RUN add-apt-repository -y ppa:ubuntuhandbook1/apps
 RUN apt -y install hugin hugin-data hugin-tools
@@ -45,7 +45,8 @@ ADD owplatform/knative.py /actionProxy/owplatform/
 ADD owplatform/openwhisk.py /actionProxy/owplatform/
 
 RUN mkdir -p /action
-ADD stub.sh /action/exec
-RUN chmod +x /action/exec
+ADD action.py /action/exec
+ADD settings.py /action/exec
+RUN chmod a+x /action/exec
 
 CMD ["/bin/bash", "-c", "cd actionProxy && python -u actionproxy.py"]

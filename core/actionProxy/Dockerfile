@@ -16,7 +16,7 @@
 #
 
 # Dockerfile for docker skeleton (useful for running blackbox binaries, scripts, or Python 3 actions) .
-FROM python:3.6-alpine
+FROM python:3.11-alpine
 
 # Upgrade and install basic Python dependencies.
 RUN apk upgrade --update \
@@ -39,4 +39,5 @@ RUN mkdir -p /action
 ADD stub.sh /action/exec
 RUN chmod +x /action/exec
 
-CMD ["/bin/bash", "-c", "cd actionProxy && python -u actionproxy.py"]
+WORKDIR /actionProxy
+CMD ["python", "-u ", "actionproxy.py"]

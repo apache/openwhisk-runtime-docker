@@ -19,12 +19,13 @@
 FROM python:3.6-alpine
 
 # Upgrade and install basic Python dependencies.
+# Use quick greenlet==1.1.3.post0 as  update version is not compatible with action Proxy
 RUN apk upgrade --update \
   && apk add --no-cache bash perl jq zip git curl wget openssl ca-certificates sed openssh-client \
   && update-ca-certificates \
   && apk add --no-cache --virtual .build-deps bzip2-dev g++ libc-dev \
   && pip install --upgrade pip setuptools six \
-  && pip install --no-cache-dir gevent==1.3.6 flask==1.0.2 \
+  && pip install --no-cache-dir gevent==1.3.6 flask==1.0.2 greenlet==1.1.3.post0\
   && apk del .build-deps
 
 ENV FLASK_PROXY_PORT 8080

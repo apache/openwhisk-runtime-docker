@@ -1,14 +1,11 @@
 """Executable Python script for a proxy service to dockerSkeleton.
-
 Provides a proxy service (using Flask, a Python web microframework)
 that implements the required /init and /run routes to interact with
 the OpenWhisk invoker service.
-
 The implementation of these routes is encapsulated in a class named
 ActionRunner which provides a basic framework for receiving code
 from an invoker, preparing it for execution, and then running the
 code when required.
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -45,13 +42,9 @@ from gevent.pywsgi import WSGIServer
 from owplatform.knative import KnativeImpl
 from owplatform.openwhisk import OpenWhiskImpl
 
-import settings
-
 PLATFORM_OPENWHISK = 'openwhisk'
 PLATFORM_KNATIVE = 'knative'
 DEFAULT_PLATFORM = PLATFORM_OPENWHISK
-
-aplog = []
 
 class ActionRunner:
     """ActionRunner."""
@@ -62,7 +55,7 @@ class ActionRunner:
     # @param binary the path where the binary will be located (may be the
     # same as source code path)
     def __init__(self, source=None, binary=None, zipdest=None):
-        defaultBinary = os.path.join(settings.action_dir, settings.action_file)
+        defaultBinary = '/action/exec'
         self.source = source if source else defaultBinary
         self.binary = binary if binary else defaultBinary
         self.zipdest = zipdest if zipdest else os.path.dirname(self.source)
@@ -87,7 +80,6 @@ class ActionRunner:
                 else:
                     return self.initCodeFromZip(message)
             else:
-                aplog.append('\'code\' element not found in init message')
                 return False
 
         if prep():
@@ -96,14 +88,11 @@ class ActionRunner:
                 # the message is passed along as it may contain other
                 # fields relevant to a specific container.
                 if self.epilogue(message) is False:
-                    aplog.append('epilogue() failed')
                     return False
                 # build the source
                 if self.build(message) is False:
-                    aplog.append('build() failed')
                     return False
-            except Exception as e:
-                aplog.append('Exception: ' + str(e))
+            except Exception:
                 return False
         # verify the binary exists and is executable
         return self.verify()
@@ -118,11 +107,8 @@ class ActionRunner:
 
     # @return True iff binary exists and is executable, False otherwise
     def verify(self):
-        if os.path.isfile(self.binary) and os.access(self.binary, os.X_OK):
-            return True
-        else:
-            aplog.append('verification of action file failed (not present or access denied)')
-            return False
+        return (os.path.isfile(self.binary) and
+                os.access(self.binary, os.X_OK))
 
     # constructs an environment for the action to run in
     # @param message is a JSON object received from invoker (should
@@ -146,7 +132,7 @@ class ActionRunner:
         def error(msg):
             # fall through (exception and else case are handled the same way)
             sys.stdout.write('%s\n' % msg)
-            return (502, {'error': 'The action did not return a dictionary, error: {}'.format(msg)})
+            return (502, {'error': 'The action did not return a dictionary or array.'})
 
         try:
             input = json.dumps(args)
@@ -165,7 +151,6 @@ class ActionRunner:
                     stdin=subprocess.PIPE,
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
-                    shell=True,
                     env=env)
             # run the process and wait until it completes.
             # stdout/stderr will always be set because we passed PIPEs to Popen
@@ -198,7 +183,7 @@ class ActionRunner:
 
         try:
             json_output = json.loads(lastLine)
-            if isinstance(json_output, dict):
+            if isinstance(json_output, dict) or isinstance(json_output, list):
                 return (200, json_output)
             else:
                 return error(lastLine)
@@ -254,25 +239,23 @@ def init(message=None):
     if not isinstance(value, dict):
         flask.abort(404)
 
-    errstr = ''
     try:
         status = runner.init(value)
     except Exception as e:
-        aplog.append('Exception: ' + str(e))
         status = False
 
     if status is True:
         proxy.initialized = True
         return ('OK', 200)
     else:
-        response = flask.jsonify({'error': 'The action failed to generate or locate a binary: ' + str(aplog)})
+        response = flask.jsonify({'error': 'The action failed to generate or locate a binary. See logs for details.'})
         response.status_code = 502
         return complete(response)
 
 
 def run(message=None):
     def error():
-        response = flask.jsonify({'error': 'The action did not receive a dictionary as an argument.'})
+        response = flask.jsonify({'error': 'The action did not receive a dictionary or array as an argument.'})
         response.status_code = 404
         return complete(response)
 
@@ -283,7 +266,7 @@ def run(message=None):
         return error()
     else:
         args = message.get('value', {}) if message else {}
-        if not isinstance(args, dict):
+        if not (isinstance(args, dict) or isinstance(args, list)):
             return error()
 
     if runner.verify():
@@ -339,8 +322,8 @@ def main():
     else:
         platformImpl = OpenWhiskImpl(proxy)
         if targetPlatform != PLATFORM_OPENWHISK:
-            print(f"Invalid __OW_RUNTIME_PLATFORM {targetPlatform}! "
-                  f"Valid Platforms are {PLATFORM_OPENWHISK} and {PLATFORM_KNATIVE}. "
+            print(f"Invalid __OW_RUNTIME_PLATFORM {targetPlatform}! " +
+                  f"Valid Platforms are {PLATFORM_OPENWHISK} and {PLATFORM_KNATIVE}. " +
                   f"Defaulting to {PLATFORM_OPENWHISK}.", file=sys.stderr)
 
     platformImpl.registerHandlers(init, run)

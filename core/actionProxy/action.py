@@ -19,6 +19,8 @@ def main(args):
     execute_hugin_stitch()
     cleanup_working_directory()
     post_result(client)
+    delete_directories()
+    print("{\"result\": \"OK\"}")
 
 
 def get_and_save_image_locally(year, month, day, hour, minutes):
@@ -61,9 +63,13 @@ def move_files_to_directory(source_dir, target_dir):
     
 def get_folder(client, year, month, day, hour, minutes):
     date = "/" + year + "/" + month + "/" + day + "/" + hour + minutes + "/"
-    path = "/Microstep/" + date + "/90_FULLHD/"
+    path = "/Microstep" + date + "90_FULLHD/"
     shutil.rmtree(settings.working_dir, ignore_errors=True)
     os.makedirs(settings.working_dir)
+    shutil.rmtree(settings.tmp_img, ignore_errors=True)
+    os.makedirs(settings.tmp_img)
+    shutil.rmtree(settings.tmp_pto, ignore_errors=True)
+    os.makedirs(settings.tmp_pto)
     client.download_sync(remote_path=path, local_path=settings.tmp_img) #C:/Users/lukasu/Documents/sav/hugin-0.7/hugin/tmp/
     move_files_to_directory(settings.tmp_img, settings.working_dir)
     client.download_sync(remote_path="/Microstep/hugin/pto/", local_path=settings.tmp_pto)
@@ -87,6 +93,11 @@ def cleanup_working_directory():
                 shutil.rmtree(file_path)
         except Exception as e:
             print('Failed to delete %s. Reason: %s' % (file_path, e))
+
+def delete_directories():
+    shutil.rmtree(settings.tmp_img, ignore_errors=True)
+    shutil.rmtree(settings.tmp_pto, ignore_errors=True)
+    shutil.rmtree(settings.working_dir, ignore_errors=True)
 
 if __name__ == '__main__':
     main(sys.argv)

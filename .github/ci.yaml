@@ -96,11 +96,5 @@ jobs:
         if: ${{ env.PUSH_RELEASE == 'true' }}
         working-directory: runtime
         run: |
-          RUNTIME_VERSION=${GITHUB_REF_NAME%@*}
           IMAGE_TAG=${GITHUB_REF_NAME##*@}
-          if [ ${IMAGE_NAME} == "dockerskeleton" ]; then
-            GRADLE_BUILD=":core:actionProxy:distDocker"
-          elif [ ${IMAGE_NAME} == "example" ]; then
-            GRADLE_BUILD=":sdk:docker:distDocker"
-          fi
-          ./gradlew :core:$RUNTIME:distDocker -PdockerRegistry=docker.io -PdockerImagePrefix=openwhisk -PdockerImageTag=$IMAGE_TAG
+          ./gradlew :core:actionProxy:distDocker -PdockerRegistry=docker.io -PdockerImagePrefix=openwhisk -PdockerImageTag=$IMAGE_TAG

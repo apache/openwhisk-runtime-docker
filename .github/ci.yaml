@@ -63,10 +63,11 @@ jobs:
           ./gradlew install
 
       # Build this repository
-      - name: Build Runtime
+      - name: Build Runtime && SDK
         working-directory: runtime
         run: |
           ./gradlew distDocker
+          ./sdk/docker/build_tgz.sh blackbox.tar.gz
 
       # Test this repository
       - name: Test Runtime
@@ -97,4 +98,14 @@ jobs:
         working-directory: runtime
         run: |
           IMAGE_TAG=${GITHUB_REF_NAME##*@}
-          ./gradlew :core:actionProxy:distDocker -PdockerRegistry=docker.io -PdockerImagePrefix=openwhisk -PdockerImageTag=$IMAGE_TAG
+          SHORT_COMMIT=$(git rev-parse --short "$GITHUB_SHA")
+          GRADLE_BUILD=":core:actionProxy:distDocker"
+
+          if [ ${IMAGE_NAME} == "dockerskeleton" ]; then
+            GRADLE_BUILD=":core:actionProxy:distDocker"
+          elif [ ${IMAGE_NAME} == "example" ]; then
+            GRADLE_BUILD=":sdk:docker:distDocker"
+          fi
+
+          ./gradlew ${GRADLE_BUILD} -PdockerRegistry=docker.io -PdockerImagePrefix=openwhisk -PdockerImageTag=$IMAGE_TAG
+          ./gradlew ${GRADLE_BUILD} -PdockerRegistry=docker.io -PdockerImagePrefix=openwhisk -PdockerImageTag=$SHORT_COMMIT

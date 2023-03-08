@@ -76,8 +76,11 @@ jobs:
       - name: Test Runtime
         working-directory: runtime
         run: |
+          ls -la ..
+          echo "--------"
           export OPENWHISK_HOME="../core"
           ls -la $OPENWHISK_HOME
+          echo "--------"
           ./gradlew :tests:checkScalafmtAll
           ./gradlew :tests:test
 

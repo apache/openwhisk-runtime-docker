@@ -61,11 +61,17 @@ jobs:
       - name: Compile and Install Core OpenWhisk
         working-directory: core
         run: |
+          ./gradlew install tests:buildArtifacts
           export OPENWHISK_HOME=$(pwd)
           echo "openwhisk.home=$OPENWHISK_HOME" > whisk.properties
           echo "vcap.services.file=" >> whisk.properties
           ./gradlew :tests:compileTestScala
           ./gradlew install
+          
+      - name: Compile SDK
+        working-directory: runtime
+        run: | 
+          ./sdk/docker/build_tgz.sh blackbox.tar.gz
 
       # Build this repository
       - name: Build Runtime && SDK
@@ -80,6 +86,7 @@ jobs:
         run: |
           export OPENWHISK_HOME="../core"
           ls -la $OPENWHISK_HOME
+          cat $OPENWHISK_HOME/whisk.properties
           echo "--------"
           ./gradlew :tests:checkScalafmtAll
           ./gradlew :tests:test

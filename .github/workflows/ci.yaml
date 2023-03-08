@@ -51,14 +51,17 @@ jobs:
         with:
           repository: apache/openwhisk
           path: core
+
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '11'
+
       - name: Compile and Install Core OpenWhisk
         working-directory: core
         run: |
+          export OPENWHISK_HOME=$(pwd)
           ./gradlew :tests:compileTestScala
           ./gradlew install
 
@@ -73,6 +76,8 @@ jobs:
       - name: Test Runtime
         working-directory: runtime
         run: |
+          export OPENWHISK_HOME="../core"
+          ls -la $OPENWHISK_HOME
           ./gradlew :tests:checkScalafmtAll
           ./gradlew :tests:test
 

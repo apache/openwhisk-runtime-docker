@@ -62,6 +62,8 @@ jobs:
         working-directory: core
         run: |
           export OPENWHISK_HOME=$(pwd)
+          echo "openwhisk.home=$OPENWHISK_HOME" > whisk.properties
+          echo "vcap.services.file=" >> whisk.properties
           ./gradlew :tests:compileTestScala
           ./gradlew install
 
@@ -76,8 +78,6 @@ jobs:
       - name: Test Runtime
         working-directory: runtime
         run: |
-          ls -la ..
-          echo "--------"
           export OPENWHISK_HOME="../core"
           ls -la $OPENWHISK_HOME
           echo "--------"

@@ -52,11 +52,29 @@ jobs:
           repository: apache/openwhisk
           path: core
 
+      - name: Checkout OpenWhisk Utilities repo
+        uses: actions/checkout@v3
+        with:
+          repository: apache/openwhisk-utilities
+          path: utilities
+
+  # possible error java 11
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '11'
+
+      - name: Setup OpenWhisk
+        working-directory: core
+        run: |
+          ./tools/travis/setup.sh
+
+      # run scancode using the ASF Release configuration
+      - name: Setup
+        working-directory: utilities
+        run: |
+          scancode/scanCode.py --config scancode/ASF-Release.cfg ../runtime
 
       - name: Compile and Install Core OpenWhisk
         working-directory: core
@@ -65,13 +83,6 @@ jobs:
           export OPENWHISK_HOME=$(pwd)
           echo "openwhisk.home=$OPENWHISK_HOME" > whisk.properties
           echo "vcap.services.file=" >> whisk.properties
-          ./gradlew :tests:compileTestScala
-          ./gradlew install
-          
-      - name: Compile SDK
-        working-directory: runtime
-        run: | 
-          ./sdk/docker/build_tgz.sh blackbox.tar.gz
 
       # Build this repository
       - name: Build Runtime && SDK

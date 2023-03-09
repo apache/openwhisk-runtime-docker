@@ -58,7 +58,6 @@ jobs:
           repository: apache/openwhisk-utilities
           path: utilities
 
-  # possible error java 11
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
@@ -96,9 +95,6 @@ jobs:
         working-directory: runtime
         run: |
           export OPENWHISK_HOME="$(pwd)/../core"
-          ls -la $OPENWHISK_HOME
-          cat $OPENWHISK_HOME/whisk.properties
-          echo "--------"
           ./gradlew :tests:checkScalafmtAll
           ./gradlew :tests:test
 

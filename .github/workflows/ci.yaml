@@ -95,7 +95,7 @@ jobs:
       - name: Test Runtime
         working-directory: runtime
         run: |
-          export OPENWHISK_HOME="../core"
+          export OPENWHISK_HOME="$(pwd)/../core"
           ls -la $OPENWHISK_HOME
           cat $OPENWHISK_HOME/whisk.properties
           echo "--------"

@@ -16,16 +16,15 @@
 #
 
 # Dockerfile for docker skeleton (useful for running blackbox binaries, scripts, or Python 3 actions) .
-FROM python:3.6-alpine
+FROM python:3.11-alpine
 
 # Upgrade and install basic Python dependencies.
-# Use quick greenlet==1.1.3.post0 as  update version is not compatible with action Proxy
 RUN apk upgrade --update \
   && apk add --no-cache bash perl jq zip git curl wget openssl ca-certificates sed openssh-client \
   && update-ca-certificates \
   && apk add --no-cache --virtual .build-deps bzip2-dev g++ libc-dev \
   && pip install --upgrade pip setuptools six \
-  && pip install --no-cache-dir gevent==1.3.6 flask==1.0.2 greenlet==1.1.3.post0\
+  && pip install --no-cache-dir gevent==22.10.2 flask==2.2.3  greenlet==2.0.2\
   && apk del .build-deps
 
 ENV FLASK_PROXY_PORT 8080
@@ -40,4 +39,6 @@ RUN mkdir -p /action
 ADD stub.sh /action/exec
 RUN chmod +x /action/exec
 
-CMD ["/bin/bash", "-c", "cd actionProxy && python -u actionproxy.py"]
+WORKDIR /actionProxy
+
+CMD ["python", "-u", "actionproxy.py"]

@@ -19,6 +19,10 @@
 
 # Apache OpenWhisk Docker Runtime Container
 
+## 1.15.0
+  - Update base python image to `python:3.11-alpine`
+  - Update python dependacies
+
 ## 1.14.0
   - Support for __OW_ACTION_VERSION (openwhisk/4761)
 

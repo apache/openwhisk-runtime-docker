@@ -31,4 +31,6 @@ RUN apk add --no-cache --virtual .build-deps \
  && cd /action; gcc -o exec example.c \
  && apk del .build-deps
 
-CMD ["/bin/bash", "-c", "cd actionProxy && python -u actionproxy.py"]
+WORKDIR /actionProxy
+
+CMD ["python", "-u", "actionproxy.py"]

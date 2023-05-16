@@ -22,6 +22,7 @@
 ## 1.15.0
   - Update base python image to `python:3.11-alpine`
   - Update python dependacies
+  -  Support array result include sequence action (#92)
 
 ## 1.14.0
   - Support for __OW_ACTION_VERSION (openwhisk/4761)

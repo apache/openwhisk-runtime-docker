@@ -19,6 +19,10 @@
 
 # Apache OpenWhisk Docker Runtime Container
 
+## next release
+Changes:
+  - Update Python dependencies
+
 ## 1.15.0
   - Update base python image to `python:3.11-alpine`
   - Update python dependacies
